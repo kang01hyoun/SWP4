@@ -101,18 +101,21 @@ public class Game{
         }
     }
 
-
+    //게임 상태 확인
     private void updateGameState(){
         Color playerColor = currentPlayer.getColor();
         boolean inCheck = isKingInCheck(playerColor, board);
         boolean hasMoves = hasAnyLegalMoves(playerColor);
 
+        // 체크, 합법적 움직임 없음 -> 체크메이트
         if(inCheck && !hasMoves){
             state = GameState.CHECKMATE;
         }
+        // 이동 가능한 곳 없음-> 스테일메이트(무승부)
         else if(!inCheck && !hasMoves){
             state = GameState.STALEMATE;
         }
+        //
         else if (inCheck){
             state = GameState.CHECK;
         }
@@ -183,6 +186,7 @@ public class Game{
         return legalMoves;
     }
 
+    //합법적인 이동이 있는가 반환
     private boolean hasAnyLegalMoves(Color playerColor) {
         List<Piece> myPieces = getPieces(playerColor, board);
         for(int k = 0; k < myPieces.size(); k++){
@@ -195,6 +199,7 @@ public class Game{
         return false;
     }
 
+    //킹을 위협에 빠지지 않게 하는 합법적인 이동에 앙파상 및 캐슬링 규칙 추가
     private List<Move> getAllLegalMovesForPiece(Piece piece) {
         //킹을 위험에 빠트리지 않는 표준 이동
         List<Move> legalMoves = getStandardLegalMoves(piece);
