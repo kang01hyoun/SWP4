@@ -54,7 +54,7 @@ public class Game{
                 System.out.printf("경고: 현재 %s 플레이어가 체크 상태입니다!\n",playerColorStr);
             }
 
-            //player 1의 player 2 호출
+            //현재 턴 플레이어 이동 처리
             handleTurn();
 
             if(findKing(getOpponentColor(), this.board) == null){

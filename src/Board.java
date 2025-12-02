@@ -248,7 +248,7 @@ public class Board {
         }
         else return null;
 
-        // hasmoved 도 복사
+        // hasMoved 도 복사
         newPiece.setHasMoved(p.hasMoved());
         return newPiece;
     }
