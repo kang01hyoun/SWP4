@@ -47,7 +47,7 @@ public class Game{
                 break;
             }
             if(state == GameState.STALEMATE){
-                System.out.printf("게임 종료: 스테일메이트! 무승부입니다.\n", playerColorStr);
+                System.out.printf("게임 종료: 스테일메이트! 무승부입니다.\n");
                 break;
             }
             if(state == GameState.CHECK){
@@ -62,7 +62,7 @@ public class Game{
                 System.out.println("게임을 종료합니다.");
                 break;
             }
-
+            // 플레이어 전환
             switchPlayer();
         }
 
@@ -219,6 +219,9 @@ public class Game{
         return legalMoves;
     }
 
+    // 왕과 룩이 한 번도 움직이지 않았는지(hasMoved=false).
+    // 왕과 룩 사이의 경로가 비어 있는지.
+    // 왕이 이동하는 칸이나 경로가 공격받지 않는지(isSquareSafe)를 검사합니다.
     private List<Move> getLegalCastlingMoves(King king) {
         List<Move> castlingMoves = new ArrayList<>();
         //킹이 움직인 적 없고, 현재 체크 상태가 아니여야 함
@@ -241,6 +244,8 @@ public class Game{
             }
         }
 
+
+        //반대쪽 검사
         Piece rightRook = board.getPieceAt(new Position(y,7));
         if(rightRook instanceof Rook && !rightRook.hasMoved()){
             if(board.isEmpty(new Position(y,5)) && board.isEmpty(new Position(y,6))){
@@ -252,6 +257,8 @@ public class Game{
         return castlingMoves;
     }
 
+    //직전 수(board.getLastMove())가 상대 폰의 2칸 전진이었는지 확인하고,
+    //해당 백색/흑색 폰이 앙파상 위치에 있는지 검사합니다.
     private Move getLegalEnPassantMove(Pawn pawn) {
         Move lastMove = board.getLastMove();
         if (lastMove == null) return null; // Optional.empty() 대신 null 반환
@@ -341,13 +348,15 @@ public class Game{
         }
     }
 
-    public void switchPlayer(){
+    public void switchPlayer() {
         currentPlayer = (currentPlayer == playerWhite) ? playerBlack : playerWhite;
     }
+
     public Color getOpponentColor(){
         return (currentPlayer.getColor() == Color.WHITE) ? Color.BLACK : Color.WHITE;
     }
 
+    //기물을 순회하여 킹을 찾는 메서드
     private Position findKing(Color color, Board boardContext){
         for(int y = 0; y < 8; y++){
             for(int x = 0; x < 8; x++){
@@ -376,6 +385,7 @@ public class Game{
         return pieces;
     }
 
+    //캐슬링처럼 특정 칸이 상대 기물에게 공격받는지 확인해야 할 때 사용되는 헬퍼 메서드
     private boolean isSquareSafe(Position pos, Color myColor){
         Color opponentColor = (myColor == Color.WHITE) ? Color.BLACK : Color.WHITE;
         List<Piece> opponentPieces = getPieces(opponentColor, board);
@@ -406,6 +416,7 @@ public class Game{
         return true;
     }
 
+    //콘솔 창 다음으로 넘기기
     private void clearConsole(){
         for(int y = 0; y < 50; y++){
             System.out.println();
